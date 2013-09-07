@@ -1,5 +1,6 @@
 <html>
   <head>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
     <script type="text/javascript" src="login.js"></script>
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
   </head>
@@ -12,14 +13,14 @@
         <input id="s-email" type="text"></input>
         <h3>Password:</h3>
         <input id="s-pw" type="password"></input>
-        <button type="button" id="new-user" class="btn btn-success" onclick="submit">Submit</button>
+        <button type="button" id="new-user" class="btn btn-success" onclick="submit()">Submit</button>
       </div>
       <div id="login" class="col-xs-6 center">
         <h3>Email:</h3>
         <input id="l-email" type="text"></input>
         <h3>Password:</h3>
         <input id="l-pw" type="password"></input>
-        <button type="button" id="new-user" class="btn btn-primary" onclick="login">Login</button>
+        <button type="button" id="new-user" class="btn btn-primary" onclick="login()">Login</button>
       </div>
     </div>
   </body>
