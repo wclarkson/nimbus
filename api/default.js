@@ -1,15 +1,36 @@
 var express = require('express');
 var app = express();
 var logger = require('logger').createLogger();
-var passport = require('passport')
-var BasicStrategy = require('passport-http').BasicStrategy
-var User = require('passport-http').User
+var passport = require('passport');
+var BasicStrategy = require('passport-http').BasicStrategy;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema
 
-var auth = express.basicAuth(function(user, pass, callback) {
-  var result = (user === 'test' && pass === 'test');
-  callback(null, result);
+mongoose.connect('mongodb://localhost/nimbus');
+
+var userSchema = new Schema({
+  firstname:  String,
+  lastname:   String,
+  email:      String,
+  password:   String,
+  boxes: [{
+    name:           String,
+    session_token:  String,
+    refresh_token:  String
+  }]
 });
 
+userSchema.methods.validPassword = function(password)
+{
+  return password === this.password;
+}
+
+var Box = mongoose.model('Box', userSchema);
+var User = mongoose.model('User', userSchema);
+
+app.use(express.bodyParser());
+app.use(express.cookieParser());
+app.use(express.session({secret: 'thisisasecret', cookie: {maxAge : 3600000}}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -24,15 +45,13 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new BasicStrategy(
-      function(username, password, done) {
-        return done(null, true);
-        User.findOne({ username : username }, function (err, user) {
+      function(email, password, done) {
+        User.findOne({ email: email }, function(err, user) {
           if (err) { return done(err); }
           if (!user) { return done(null, false); }
           if (!user.validPassword(password)) { return done(null, false); }
           return done(null, user);
         });
-        return done(null, null);
       }));
 
 app.get('/', function(req, res) {
@@ -45,17 +64,17 @@ app.get('/', function(req, res) {
   //  });
 });
 
-app.get('/q', auth, function(req, res) {
-  console.log(req.params);
-  res.send('abc');
-});
-
 app.get('/auth', 
     passport.authenticate('basic', { session : true }),
     function(req, res) {
       res.send('you\'re logged in!');
     }
-    );
+);
+
+app.get('/callback/box', function(req, res){
+  res.send(req.query);
+})
+
 
 app.delete('/auth', function(req, res) {
 
@@ -70,7 +89,18 @@ app.delete('/service', function(req, res) {
 });
 
 app.post('/signup', function(req, res) {
-
+  debugger
+  console.log(req.body)
+  userData = {
+    firstname : req.body.firstname,
+    lastname : req.body.lastname,
+    email : req.body.email,
+    password : req.body.password,
+    boxes : []
+  };
+  var u = new User(userData);
+  u.save();
+  res.send(200, userData);
 });
 
 app.listen(3000);
