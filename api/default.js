@@ -75,6 +75,13 @@ app.get('/callback/box', function(req, res){
   res.send(req.query);
 })
 
+app.get('/callback/dropbox', function(req, res){
+  res.send(req.query);
+})
+
+app.get('/callback/gdrive', function(req, res){
+  res.send(req.query);
+})
 
 app.delete('/auth', function(req, res) {
 
