@@ -12,7 +12,7 @@ that this is what Marcella arbitrarily decided these functions should return at
 * returns whether the authorization worked.
 
 ##Create
-(Number) create((String) pathname)
+(Number) create((String) pathname, (String) contents)
 
 * returns the size of the file in bytes (0 if it failed)
 
