@@ -2,12 +2,20 @@
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
     <script src="main.js"></script>
+    <script src="services.js"></script>
+    <script src="browser.js"></script>
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
   </head>
   <body>
-    <div class="row">
-      <div ng-include="partials/services.html" class="services col-md-4"></div>
-      <div ng-include="partials/browser.html" class="browser col-md-8"></div>
+    <div ng-controller="MainCtrl">
+      <div class="row">
+        <div class="services col-md-4">
+          <div ng-include src="services.url"></div>
+        </div>
+        <div class="browser col-md-8">
+          <div ng-include src="browser.url"></div>
+        </div>
+      </div>
     </div>
   </body>
   <footer>
