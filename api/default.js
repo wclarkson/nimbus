@@ -2,11 +2,11 @@ var express = require('express');
 var app = express();
 
 app.get('/', function(req, res) {
-  res.send('hello, boobies');
-});
-
-app.post('/auth',function(req, res) {
-  res.send(500);
+  var redis = require('redis');
+  var client = redis.createClient();
+  client.get("greeting", function(err, reply) {
+    res.send(reply);
+  });
 });
 
 app.listen(3000);
