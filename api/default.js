@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var logger = require('logger').createLogger();
 
 app.get('/', function(req, res) {
   var redis = require('redis');
