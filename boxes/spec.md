@@ -3,6 +3,9 @@ Each API needs to implement CRD and also have a persistant authentication. Note
 that this is what Marcella arbitrarily decided these functions should return at
 5am, revisions are welcome.
 
+* May also want a getRemainingSpace() function
+
+
 ##Authorize
 (Boolean) authorize()
 

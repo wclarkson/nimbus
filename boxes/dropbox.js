@@ -1,18 +1,35 @@
 // CRD implementation for Dropbox API
 // THIS IS UNTESTED. 
-// Not quite sure if these global vars are doing what I want them to do (ie
-// always existing)
 
-var Dropbox = require("dropbox");
-var client = new Dropbox.Client({key:"p6oew9k9yw0k51v"});
+// the middleware will do something like
+// var apis = [makeDropbox(), makeBox(), makeGoogleDrive()]
+// for (var api in apis) {
+//   create(api);
+// }
+function makeDropbox() {
+  Dropbox = require("dropbox");
+  client = new Dropbox.Client({key:"p6oew9k9yw0k51v"});
+  return new DropboxApi(Dropbox, client);
+}
+
+function DropboxApi(Dropbox, client) {
+  this.Dropbox = Dropbox;
+  this.client = client;
+  this.authorize = authorize;
+  this.read = read;
+  this.create = create;
+  this.destroy = destroy;
+}
 
 // should be called within a click event listener so the browser will
 // definitely open the popup.
-function authorize() {
-  client.authDriver(new Dropbox.AuthDriver.Popup({
+// when I run it from the command line, this throws an error re: window,
+// probably because it doesn't have a proper browser set up.
+function authorize(api) {
+  api.client.authDriver(new api.Dropbox.AuthDriver.Popup({
     recieverUrl: "www.google.com"}));
       // ^^ url pointing to boxes/dropbox_reciever.html
-  client.authenticate( function(error, data) {
+  api.client.authenticate( function(error, data) {
     if (error) { 
       return false;
     }
@@ -20,39 +37,35 @@ function authorize() {
   });
 }
 
-// returns size in bytes.
-function create(pathname, contents) {
-  if (!client.isAuthenticated()) {
-    authorize();
+function create(api, pathname, contents) {
+  if (!api.client.isAuthenticated()) {
+    authorize(api);
   }
-  client.writeFile(pathname, contents, function(error, stat) {
+  api.client.writeFile(pathname, contents, function(error, stat) {
     if (error) {
       return 0;
     }
     return stat.size();});
 }
 
-// returns contents of file.
-function read(pathname) {
-  if (!client.isAuthenticated()) {
-    authorize();
+function read(api, pathname) {
+  if (!api.client.isAuthenticated()) {
+    authorize(api);
   }
-  client.readFile(pathname, function(error, contents) {
+  api.client.readFile(pathname, function(error, contents) {
     if (error) {
       return "";
     }
     return contents;});
 }
 
-// returns whether the delete worked.
-function destroy(pathname) {
-  if (!client.isAuthenticated()) {
-    authorize();
+function destroy(api, pathname) {
+  if (!api.client.isAuthenticated()) {
+    authorize(api);
   }
-  client.delete(pathname, function(error, stat) {
+  api.client.delete(pathname, function(error, stat) {
     if (error) {
       return false;
     }
     return true;});
 }
-
