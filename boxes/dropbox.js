@@ -25,46 +25,50 @@ function DropboxApi(Dropbox, client) {
 // definitely open the popup.
 // when I run it from the command line, this throws an error re: window,
 // probably because it doesn't have a proper browser set up.
-function authorize(api) {
+function authorize(onFail) {
   api.client.authDriver(new api.Dropbox.AuthDriver.Popup({
     recieverUrl: "www.google.com"}));
       // ^^ url pointing to boxes/dropbox_reciever.html
   api.client.authenticate( function(error, data) {
     if (error) { 
+      onFail();
       return false;
     }
     return true;
   });
 }
 
-function create(api, pathname, contents) {
+function create(pathname, contents, onFail) {
   if (!api.client.isAuthenticated()) {
     authorize(api);
   }
   api.client.writeFile(pathname, contents, function(error, stat) {
     if (error) {
+      onFail();
       return 0;
     }
     return stat.size();});
 }
 
-function read(api, pathname) {
+function read(pathname, onFail) {
   if (!api.client.isAuthenticated()) {
     authorize(api);
   }
   api.client.readFile(pathname, function(error, contents) {
     if (error) {
+      onFail();
       return "";
     }
     return contents;});
 }
 
-function destroy(api, pathname) {
+function destroy(pathname, onFail) {
   if (!api.client.isAuthenticated()) {
     authorize(api);
   }
   api.client.delete(pathname, function(error, stat) {
     if (error) {
+      onFail();
       return false;
     }
     return true;});

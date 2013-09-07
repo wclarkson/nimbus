@@ -7,22 +7,22 @@ that this is what Marcella arbitrarily decided these functions should return at
 
 
 ##Authorize
-(Boolean) authorize()
+(Boolean) authorize((Function) onFail)
 
 * returns whether the authorization worked.
 
 ##Create
-(Number) create((String) pathname)
+(Number) create((String) pathname, (String) contents, (Function) onFail)
 
-* returns the size of the file in bytes (0 if it failed)
+* returns the size of the file in bytes
 
 ##Read
-(String) read((String) pathname)
+(String) read((String) pathname, (Function) onFail)
 
-* returns the contents of the file (empty string if it failed)
+* returns the contents of the file
 
 ##Destroy
-(Boolean) destroy((String) pathname)
+(Boolean) destroy((String) pathname, (Function) onFail)
 
 * returns whether the destroy worked
 
