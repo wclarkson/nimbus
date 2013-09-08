@@ -1,0 +1,33 @@
+a.pure-menu-heading {
+	font-size: ;
+}
+
+h2.splash-subhead {
+    font-weight: 200;
+}
+
+
+div#splash-image {
+    background: #84B0BC;
+    margin-bottom: 0px;
+}
+
+div#splash-image img {
+	display: block;
+	margin: auto;
+}
+
+div.l-box {
+    padding: 1.3em;
+    font-weight: 200;
+}
+
+div#splash-text {
+    background: lightgray;
+    line-height: 200%;
+}
+
+button#signup {
+    width: 180px;
+    height: 50px;
+}
