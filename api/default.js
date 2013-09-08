@@ -5,6 +5,9 @@ var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema
+var http = require('http');
+var https = require('https');
+var fs = require('fs');
 
 mongoose.connect('mongodb://localhost/nimbus');
 
@@ -73,6 +76,32 @@ app.get('/auth',
 
 app.get('/callback/box', function(req, res){
   res.send(req.query);
+  if (res['error']) {
+    res.send('did not work');
+  } else {
+    res.send('save began to work');
+    // works to here. unsure later.
+    user = res['state'];
+    authCode = res['code'];
+    clientId = 'it9ibjpeb6ob058682960aovx4iicbdr';    
+    clientSecret = 'QimYw8RUj9OrDwEszvTM3v21R3DQWZcQ';    
+    url = 'https://www.box.com/api/oauth2/token?'    
+      + 'grant_type=authorization_code&'    
+      + 'code=' + authCode + '&'    
+      + 'client_id=' + clientId + '&'    
+      + 'client_static=' + clientSecret;    
+    res.send('now requesting');
+    request.post({uri:url, method:'POST'}, function(req, res) {
+      if (res['error']) {    
+        console.log('failed');    
+        return;    
+      }     
+      //persist res['access_token'], res['refresh_token']    
+      //        console.log('success')    
+      //             }     
+      //                 );
+    });
+  }
 })
 
 app.get('/callback/dropbox', function(req, res){
@@ -110,4 +139,10 @@ app.post('/signup', function(req, res) {
   res.send(200, userData);
 });
 
-app.listen(3000);
+var sslOptions = {
+  key: fs.readFileSync("server.key"),
+  cert: fs.readFileSync("server.crt")
+};
+
+https.createServer(sslOptions, app).listen(8443);
+http.createServer(app).listen(3000);

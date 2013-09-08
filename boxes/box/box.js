@@ -1,6 +1,3 @@
-
-
-
 var BOX_AUTHORIZE = 'https://www.box.com/api/oauth2/authorize';
 var BOX_TOKEN = 'https://www.box.com/api/oauth2/token';
 var CLIENT_ID = 'it9ibjpeb6ob058682960aovx4iicbdr';
@@ -32,7 +29,7 @@ function create(pathname, contents, onFail) {
   
 }
 
-function destory(pathname, onFail) {
+function destroy(pathname, onFail) {
 
 }
 
