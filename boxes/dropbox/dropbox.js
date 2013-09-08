@@ -1,6 +1,8 @@
 // CRD implementation for Dropbox API
 // THIS IS UNTESTED. 
 
+var ec2 = 'ec2-50-17-161-36.compute-1.amazonaws.com/api/callback/dropbox'
+
 // the middleware will do something like
 // var apis = [makeDropbox(), makeBox(), makeGoogleDrive()]
 // for (var api in apis) {
@@ -25,10 +27,9 @@ function DropboxApi(Dropbox, client) {
 // definitely open the popup.
 // when I run it from the command line, this throws an error re: window,
 // probably because it doesn't have a proper browser set up.
-function authorize(onFail) {
+function authorize(user, onFail) {
   api.client.authDriver(new api.Dropbox.AuthDriver.Popup({
-    recieverUrl: "www.google.com"}));
-      // ^^ url pointing to boxes/dropbox_reciever.html
+    recieverUrl : ec2 }));
   api.client.authenticate( function(error, data) {
     if (error) { 
       onFail();
