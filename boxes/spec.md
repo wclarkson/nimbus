@@ -7,7 +7,7 @@ that this is what Marcella arbitrarily decided these functions should return at
 
 
 ##Authorize
-(Boolean) authorize((Function) onFail)
+(Boolean) authorize((String) user, (Function) onFail)
 
 * returns whether the authorization worked.
 
