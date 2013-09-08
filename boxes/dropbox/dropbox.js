@@ -1,7 +1,7 @@
 // CRD implementation for Dropbox API
 // THIS IS UNTESTED. 
 
-var ec2 = 'ec2-50-17-161-36.compute-1.amazonaws.com/api/callback/dropbox'
+var ec2 = 'oblak.michaelbjames.com/api/callback/dropbox';
 
 // the middleware will do something like
 // var apis = [makeDropbox(), makeBox(), makeGoogleDrive()]
@@ -31,7 +31,7 @@ function authorize(user, onFail) {
   api.client.authDriver(new api.Dropbox.AuthDriver.Popup({
     recieverUrl : ec2 }));
   api.client.authenticate( function(error, data) {
-    if (error) { 
+    if (error) {
       onFail();
       return false;
     }
